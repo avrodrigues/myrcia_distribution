@@ -21,11 +21,17 @@ All models were fitted with tuned maxent.
 
 the repository has three main subfolders `script`, `data`, and `output`:
 
-- **data**
+- **data**  
 | - env
 - **output**
   - models
+    - LOO
+      - LOO_tuned_models
+      - raster_best_models
+      - raster_good_models
     - raster_best_models
+    - raster_binary_prediction
+      - bin_05_degree
     - raster_good_models
     - tuned_models
   - fig
