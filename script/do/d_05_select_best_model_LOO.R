@@ -9,21 +9,23 @@ library(here)
 # load model results ------------------------------------------------------
 
 l.files.mod <- list.files(
-  here("output", "models", "tuned_models"),
+  here("output", "models", "LOO", "LOO_tuned_models"),
   full.names = T
-)
+)[-1]
 
 
 # select the best model among tuned models for each species ---------------
 
 ## the best model is those which has:
 ## - lowest AICc (all models with delta AICc < 2 is considered equivalent);
-## - highest average of Continuos boyce index;
 ## - lowest omision rate 10 percentile
+## - highest average of Average AUC;
 ## - lowest number of coefcients.
 
 # directory to save best model rasters
-dir.save <- here("output", "models", "raster_best_models")
+dir.save <- here("output", "models", "LOO", "raster_best_models")
+
+if(!dir.exists(dir.save)) dir.create(dir.save)
 
 # best models evaluation
 best.mod.eval <- vector("list", length(l.files.mod))
@@ -35,7 +37,7 @@ idx <- 1
 
 ### select best model, save evaluation and raster
 for(i in seq_along(l.files.mod)){
-  species <- str_sub(l.files.mod[[i]], 124, nchar(l.files.mod[[i]])-11)
+  species <- str_sub(l.files.mod[[i]], 132, nchar(l.files.mod[[i]])-11)
   
   tuned.mod <- readRDS(l.files.mod[i])
   e.res <- eval.results(tuned.mod)
@@ -43,8 +45,8 @@ for(i in seq_along(l.files.mod)){
   best.mod <- 
     e.res %>% 
     filter(delta.AICc < 2) %>% 
-    filter(cbi.val.avg == max(cbi.val.avg, na.rm = T)) %>% 
     filter(or.10p.avg == min(or.10p.avg, na.rm = T)) %>% 
+    filter(auc.val.avg == max(auc.val.avg, na.rm = T)) %>% 
     filter(ncoef == min(ncoef)) %>% 
     slice_head() %>% 
     mutate(species = species)
@@ -76,7 +78,7 @@ for(i in seq_along(l.files.mod)){
 
 best.mod.eval.df <- bind_rows(best.mod.eval)
 
-saveRDS(best.mod.eval.df, here("output", "models", "best_models_eval_stats.rds"))
+saveRDS(best.mod.eval.df, here("output", "models", "LOO", "best_models_eval_stats.rds"))
 
 if(length(none.model) != 0){
   saveRDS(none.model, here("output", "models", "species_none_best_models_eval_stats.rds"))

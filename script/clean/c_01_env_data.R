@@ -4,7 +4,6 @@
 library(sp)
 library(raster)
 library(here)
-library(rgdal)
 
 # defining region extent
 NEO <- list(x = c(-120,-30),
@@ -20,11 +19,13 @@ l.files.clim <- list.files(here("data", "env", "A_CHELSA_cur_0ka_V1_2B_r10m"),
 bioclim.files <- grep(".tif$", l.files.clim, value = T)
 
 #load layers
-r.bioclim <- stack(bioclim.files[c(1,4,7,9,14)])
+r.bioclim <- stack(bioclim.files[c(1,4,5,6,8,9,14)])
 # crop by neotropical region extent
 neo.bioclim <- crop(r.bioclim, NEO)
 
-writeRaster(neo.bioclim, here("data","env","clim_var.tif"), bylayer = T, suffix = "names")
+writeRaster(neo.bioclim, here("data","env","clim_var.tif"), 
+            bylayer = T, suffix = "names", 
+            overwrite=TRUE)
 
 # Soil layers -------------------------------------------------------------
 
