@@ -25,4 +25,3 @@ for(i in seq_along(myrcia.bin)){
 }
 myrcia.bin[i]
 
-plot()
