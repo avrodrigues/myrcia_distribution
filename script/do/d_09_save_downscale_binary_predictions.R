@@ -28,14 +28,7 @@ bin.stk %>%
 
 
 myrcia_binary_df_05_degree %>% 
-  filter(species == "myrcia_sylvatica") %>% 
-  ggplot(aes(x = x, y = y, fill = presence)) +
-  geom_raster() +
-  coord_equal() +
-  theme_bw()
+ saveRDS(here("output", "models", "myrcia_binary_df_05_degree.rds"))
 
-myrcia_binary_df_05_degree %>% 
-  filter(species == "myrcia_zuzygium") %>% 
-  dplyr::select(x,y,presence) %>% 
-  rast()
+
  
