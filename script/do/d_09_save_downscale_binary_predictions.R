@@ -8,27 +8,45 @@ library(here)
 
 # load data ---------------------------------------------------------------
 
-bin_05_degree <- here("output", "models", "raster_binary_prediction", "bin_05_degree")
-files_bin_05_degree <- list.files(bin_05_degree, full.names = T)
+myrcia.dir <- list.files(
+  here("output", "models", "raster_binary_05_degree"),
+  full.names = T)
 
 
-bin.stk <- rast(files_bin_05_degree)
+myrcia.dir
 
-myrcia_binary_df_05_degree <- 
-bin.stk %>% 
-  as.data.frame(xy=T) %>% 
-  pivot_longer(
-    cols = myrcia_aethusa_fc_LQP_rm_1:myrcia_zuzygium_fc_LQP_rm_2,
-    names_to = "species", 
-    values_to = "presence") %>% 
-  filter(presence == 1) %>% 
-  mutate(species = word(species, 1, 2, sep = "_")) %>% 
-  arrange(species)
+l.files.to.stk <- lapply(2:4, function(i){
+  dir.a <- list.files(myrcia.dir[1], full.names = T)
+  dir.b <- list.files(myrcia.dir[i], full.names = T)
+  
+  c(dir.a, dir.b)
+})
+  
 
+l.bin.stk <- lapply(l.files.to.stk, rast)
 
+l_myrcia_binary_df_05_degree <- lapply(
+  l.bin.stk, function(bin.stk) {
+    bin.stk %>% 
+      terra::as.data.frame(xy=T, na.rm = F) %>% 
+      pivot_longer(
+        cols = 3:309,
+        names_to = "species", 
+        values_to = "presence") %>% 
+      filter(presence == 1) %>% 
+      mutate(species = word(species, 1, 2, sep = "_")) %>% 
+      arrange(species)
+  }
+)
 
-myrcia_binary_df_05_degree %>% 
- saveRDS(here("output", "models", "myrcia_binary_df_05_degree.rds"))
+names(l_myrcia_binary_df_05_degree) <- c(
+  "few_occ_thr_10p", 
+  "few_occ_thr_min", 
+  "few_occ_thr_site"
+)
+
+l_myrcia_binary_df_05_degree %>% 
+ saveRDS(here("output", "models", "list_myrcia_binary_df_05_degree.rds"))
 
 
  

@@ -4,24 +4,47 @@ library(here)
 library(stringr)
 
 
-myrcia.bin <- list.files(here("output", "models", "raster_binary_prediction"),
-                         full.names = T)
+myrcia.dir <- list.files(
+  here("output", "models", "raster_binary"),
+  full.names = T)
 
-bin_05_degree <- here("output", "models", "raster_binary_prediction", "bin_05_degree")
-if(!dir.exists(bin_05_degree)) dir.create(bin_05_degree)
-
-
-
-for(i in seq_along(myrcia.bin)){
-  bin.05 <- raster::aggregate(raster(myrcia.bin[i]), 3, fun = max)
-  file.name <- str_split(myrcia.bin[i], "./")[[1]]
-  file.name <- str_remove(file.name[length(file.name)], ".tif")
-  
-  path.save <- paste0(
-    bin_05_degree, "/", file.name
+save_dirs <- here(
+  "output", "models", "raster_binary_05_degree",
+  c("few_occ", "thr_10p", "thr_min", "thr_site")
   )
-  writeRaster(bin.05, path.save, format = "GTiff", overwrite = T)
-  
+
+for(path in save_dirs) {
+  if(!dir.exists(path)) dir.create(path)
 }
-myrcia.bin[i]
+
+for(k in seq_along(myrcia.dir)){
+  
+  file_from <- list.files(
+    here(myrcia.dir[k]),
+    full.names = T
+  )
+  
+  dir_to <- save_dirs[k]
+  
+  for(i in seq_along(file_from)){
+    
+    bin.05 <- raster::aggregate(
+      raster::raster(file_from[i]), 
+      3,
+      fun = max
+      )
+    
+    file.name <- str_split(file_from[i], "./")[[1]]
+    file.name <- str_remove(file.name[length(file.name)], ".tif")
+    
+    path.save <- paste0(
+      dir_to, "/", file.name
+    )
+    
+    writeRaster(bin.05, path.save, format = "GTiff", overwrite = T)
+  }
+
+}
+
+
 

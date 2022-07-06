@@ -29,28 +29,31 @@ myrcia.good.LOO <- list.files(
 # stacked SDM -------------------------------------------------------------
 
 myrcia.stk <- raster::stack(c(myrcia.good, myrcia.good.LOO))
-myrcia.stk.df <- as.data.frame(myrcia.stk)
-
+myrcia.stk.df <- as.data.frame(myrcia.stk, xy = T)
 
 # richness by sites
-myrcia.rich <- sum(myrcia.stk, na.rm = T)
-
-myrcia.rich.vec <- raster::values(myrcia.rich)
+myrcia.rich.vec <- myrcia.stk.df %>% 
+  dplyr::select(-c(1:2)) %>% 
+  mutate(rich = rowSums(., na.rm = T)) %>% 
+  pull(rich)
 
 names(myrcia.stk.df)
 
 myrcia.df.long <- 
   myrcia.stk.df %>% 
-    mutate(site = 1:nrow(myrcia.stk.df)) %>% 
+    mutate(site = 1:nrow(myrcia.stk.df), .before = x) %>% 
   pivot_longer(
-    myrcia_aethusa_fc_LQP_rm_1:myrcia_zuzygium_fc_LQP_rm_2, 
+    4:last_col(), 
     names_to = "species", 
     values_to = "prob"
-  )
+  ) %>% 
+  drop_na(prob)
 
 
 myrcia.site.sel <- tibble(
   site = integer(),
+  x = numeric(),
+  y = numeric(),
   species = character(),
   prob = numeric(),
   presence = integer()
@@ -73,16 +76,14 @@ for(i in site.vec){
   
   
   cat(paste("site", i), fill = T)
-} # end in 225000
+} # end in 226653
 
 
 
 # save binary predictions -------------------------------------------------
-dir.save <- here("output", "models", "raster_binary_prediction")
+dir.save <- here("output", "models", "raster_binary", "thr_site")
 
 if(!dir.exists(dir.save)) dir.create(dir.save)
-saveRDS(myrcia.site.sel, here("output", "models", "myrcia_binary_df.rds"))
-
 
 sp.file.names <- unique(myrcia.site.sel$species)
 xy.site <- xyFromCell(myrcia.stk, myrcia.site.sel$site) 
@@ -106,3 +107,96 @@ for(i in seq_along(sp.file.names)){
 
 
 
+# binary maps fixed threshold ---------------------------------------------
+load(here("data", "occ_myrcia.RData"))
+
+
+myrcia.df.long.2 <- 
+myrcia.df.long %>% 
+  mutate(species = species %>% 
+           word(1, 2, sep = "_") %>% 
+           str_to_sentence() %>% 
+           str_replace_all("_", " "),
+         )  
+  
+species_modeled <- unique(myrcia.df.long.2$species) %>% 
+  str_sort()
+
+occ.sp.xy <- 
+occ.myrcia %>% 
+  filter(species %in% species_modeled) %>% 
+  dplyr::select(species, decimalLongitude, decimalLatitude) 
+
+  
+cell.occ <- cellFromXY(
+  myrcia.stk[[1]], 
+  occ.sp.xy %>% 
+    dplyr::select(decimalLongitude, decimalLatitude) %>% 
+    set_names(c("x", "y")) %>% 
+    as.matrix() 
+  )
+
+myrcia.df.to.bin.or10p <- 
+occ.sp.xy %>% 
+  mutate(
+    site = cell.occ, 
+    obs_occ = 1
+  ) %>% 
+  right_join(
+    myrcia.df.long.2,
+    by = c("species", "site")
+  ) %>% 
+  as_tibble() %>% 
+  select(
+    site, x, y, species, prob, obs_occ
+  )
+
+threshold.df <- 
+myrcia.df.to.bin.or10p %>% 
+  filter(obs_occ == 1) %>% 
+  group_by(species) %>% 
+  summarise(
+    thr_min = min(prob), 
+    thr_10p = quantile(prob, 0.1)
+  ) %>% 
+  mutate(species = species  %>% 
+           str_to_lower() %>% 
+           str_replace_all(" ", "_"))
+
+dir_thr_min <- here("output", "models", "raster_binary", "thr_min")
+dir_thr_10p <- here("output", "models", "raster_binary", "thr_10p")
+
+for(i in seq_along(species_modeled)){
+  
+  sp <- species_modeled[i] %>% 
+    str_to_lower() %>% 
+    str_replace_all(" ", "_")
+  
+  thr_min <- threshold.df %>% 
+    filter(species == sp) %>%
+    pull(thr_min)
+  
+  thr_10p <- threshold.df %>% 
+    filter(species == sp) %>%
+    pull(thr_10p)
+  
+  sp.stk <- str_detect(names(myrcia.stk), sp) %>% which()
+  
+  bin_thr_min <- myrcia.stk[[sp.stk]] >= thr_min
+  bin_thr_10p <- myrcia.stk[[sp.stk]] >= thr_10p
+  
+  path.save.min <- paste0(
+    dir_thr_min, "/", names(myrcia.stk)[sp.stk]
+  )
+  path.save.10p <- paste0(
+    dir_thr_10p, "/", names(myrcia.stk)[sp.stk]
+  )
+  
+  
+  writeRaster(bin_thr_min, path.save.min, format = "GTiff", overwrite = T)
+  writeRaster(bin_thr_10p, path.save.10p, format = "GTiff", overwrite = T)
+}
+
+
+plot(bin_thr_min)
+plot(bin_thr_10p)
