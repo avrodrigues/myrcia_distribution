@@ -16,12 +16,12 @@ library(tidyverse)
 # Load data ---------------------------------------------------------------
 
 myrcia.good <- list.files(
-  here("output", "models", "raster_good_models"),
+  here("output", "models", "CV_spatial_block", "raster_good_models"),
   full.names = T
   )
 
 myrcia.good.LOO <- list.files(
-  here("output", "models", "LOO", "raster_good_models"), 
+  here("output", "models", "CV_leave_one_out", "raster_good_models"), 
   full.names = T
   )
 
@@ -81,7 +81,9 @@ for(i in site.vec){
 
 
 # save binary predictions -------------------------------------------------
-dir.save <- here("output", "models", "raster_binary", "thr_site")
+dir.save <- here(
+  "output", "models_binary_prediction", "raster_binary_10_minutes", "thr_site"
+  )
 
 if(!dir.exists(dir.save)) dir.create(dir.save)
 

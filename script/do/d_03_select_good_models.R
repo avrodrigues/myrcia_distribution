@@ -8,7 +8,9 @@ library(here)
 
 # select good models ------------------------------------------------------
 
-best.mod.eval.df <- readRDS(here("output", "models", "best_models_eval_stats.rds"))
+best.mod.eval.df <- readRDS(
+  here("output", "models", "CV_spatial_block", "best_models_eval_stats.rds")
+  )
 
 
 species.good.mods <- 
@@ -18,8 +20,8 @@ best.mod.eval.df %>%
   dplyr::select(species)
 
 
-dir.best <-here("output", "models","raster_best_models")
-dir.good <- here("output", "models","raster_good_models")
+dir.best <- here("output", "models", "CV_spatial_block", "raster_best_models")
+dir.good <- here("output", "models", "CV_spatial_block", "raster_good_models")
 #dir.create(dir.good)
 
 ## copy raster good models to new directory
@@ -34,4 +36,7 @@ good.models.eval.stats <-
   best.mod.eval.df %>% 
   filter(cbi.val.avg >= 0.5) 
 
-saveRDS(good.models.eval.stats, here("output", "models", "good_models_eval_stats.rds"))
+saveRDS(
+  good.models.eval.stats,
+  here("output", "models", "CV_spatial_block","good_models_eval_stats.rds")
+  )

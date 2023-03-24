@@ -5,11 +5,11 @@ library(stringr)
 
 
 myrcia.dir <- list.files(
-  here("output", "models", "raster_binary"),
+  here("output", "models_binary_prediction", "raster_binary_10_minutes"),
   full.names = T)
 
 save_dirs <- here(
-  "output", "models", "raster_binary_05_degree",
+  "output", "models_binary_prediction", "raster_binary_05_degree",
   c("few_occ", "thr_site")
   )
 

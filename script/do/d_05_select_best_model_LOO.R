@@ -9,7 +9,7 @@ library(here)
 # load model results ------------------------------------------------------
 
 l.files.mod <- list.files(
-  here("output", "models", "LOO", "LOO_tuned_models"),
+  here("output", "models", "CV_leave_one_out", "LOO_tunned_models"),
   full.names = T
 )[-1]
 
@@ -23,7 +23,7 @@ l.files.mod <- list.files(
 ## - lowest number of coefcients.
 
 # directory to save best model rasters
-dir.save <- here("output", "models", "LOO", "raster_best_models")
+dir.save <- here("output", "models", "CV_leave_one_out", "raster_best_models")
 
 if(!dir.exists(dir.save)) dir.create(dir.save)
 
@@ -78,7 +78,7 @@ for(i in seq_along(l.files.mod)){
 
 best.mod.eval.df <- bind_rows(best.mod.eval)
 
-saveRDS(best.mod.eval.df, here("output", "models", "LOO", "best_models_eval_stats.rds"))
+saveRDS(best.mod.eval.df, here("output", "models", "CV_leave_one_out", "best_models_eval_stats.rds"))
 
 if(length(none.model) != 0){
   saveRDS(none.model, here("output", "models", "species_none_best_models_eval_stats.rds"))

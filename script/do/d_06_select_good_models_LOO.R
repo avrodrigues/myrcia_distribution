@@ -8,7 +8,7 @@ library(here)
 
 # select good models ------------------------------------------------------
 
-best.mod.eval.df <- readRDS(here("output", "models", "LOO", "best_models_eval_stats.rds"))
+best.mod.eval.df <- readRDS(here("output", "models", "CV_leave_one_out", "best_models_eval_stats.rds"))
 
 
 species.good.mods <- 
@@ -18,8 +18,8 @@ best.mod.eval.df %>%
   dplyr::select(species)
 
 
-dir.best <-here("output", "models", "LOO", "raster_best_models")
-dir.good <- here("output", "models", "LOO", "raster_good_models")
+dir.best <-here("output", "models", "CV_leave_one_out", "raster_best_models")
+dir.good <- here("output", "models", "CV_leave_one_out", "raster_good_models")
 
 if(!dir.exists(dir.good)) dir.create(dir.good)
 
@@ -35,4 +35,4 @@ good.models.eval.stats <-
   best.mod.eval.df %>% 
   filter(auc.val.avg >= 0.70 & or.10p.avg <= 0.25) 
 
-saveRDS(good.models.eval.stats, here("output", "models", "good_models_eval_stats.rds"))
+saveRDS(good.models.eval.stats, here("output", "models", "CV_leave_one_out", "good_models_eval_stats.rds"))

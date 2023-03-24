@@ -32,7 +32,7 @@ spp.names.25 <-
   as.character()
 
 # modeling ----------------------------------------------------------------
-dir.save <- here("output", "models", "tuned_models")
+dir.save <- here("output", "models", "CV_spatial_block", "tunned_models")
 
 for(i in seq_along(spp.names.25)){
   ## select species
@@ -48,7 +48,7 @@ for(i in seq_along(spp.names.25)){
   #cell.number <- rownames(na.omit(as.data.frame(values(clima.buffer))))
   back.buff <- gIntersection(bg.spatial, buffer.area) 
   
-  ## Pontos de presença e background
+  ## presence e background points
   pres <- as.data.frame(sp.occ) 
   names(pres) <- c("x", "y")
   back <- as.data.frame(back.buff)

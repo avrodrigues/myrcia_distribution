@@ -13,9 +13,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The goal is to model the species distribution for all *Myrcia* species with occurrence records available and with good quality. 
 
-The modeling strategy was to split the species in two groups, with less and more than 25 occurrences. The species with few occurrence records were modeled using leave-one-out procedure. The other group were modeled using spatial blocks. 
+The modeling strategy was to split the species in two groups, with less and more than 25 occurrences. The species with few occurrence records were modeled using leave-one-out cross-validation The other group were modeled using spatial blocks cross-validation. 
 
 All models were fitted with tuned maxent. 
+
+
 
 ## Repository structure
 

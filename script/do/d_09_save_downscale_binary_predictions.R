@@ -9,10 +9,8 @@ library(here)
 # load data ---------------------------------------------------------------
 
 myrcia.files <- list.files(
-  here("output", "models", "raster_binary_05_degree"),
+  here("output", "models_binary_prediction", "raster_binary_05_degree"),
   full.names = T, recursive = T, pattern = ".tif")
-
-
 
 bin.stk <- rast(myrcia.files)
 
@@ -28,8 +26,10 @@ myrcia_binary_df_05_degree <- bin.stk %>%
 
 
 myrcia_binary_df_05_degree %>% 
- write.csv(here("output", "models", "myrcia_binary_df_05_degree.csv"), 
-           row.names = F)
+ write.csv(
+   here("output", "models_binary_prediction", "myrcia_binary_df_05_degree.csv"), 
+   row.names = F
+   )
 
 
  

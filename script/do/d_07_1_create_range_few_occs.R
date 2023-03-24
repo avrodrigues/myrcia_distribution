@@ -32,7 +32,7 @@ spp.names.few.occ <-
   unlist() %>% 
   as.character()
 
-dir.save <- here("output", "models", "raster_binary_prediction")
+dir.save <- here("output", "models_binary_prediction", "raster_binary", "few_occ")
 
 for(i in seq_along(spp.names.few.occ)){
   occ.temp.sf <- 
@@ -66,7 +66,7 @@ for(i in seq_along(spp.names.few.occ)){
     str_replace_all(" ", "_") %>% 
     paste0("_few_occ.tif")
   
-  path.save <- here("output", "models", "raster_binary_prediction", sp_name)
+  path.save <- here(dir.save, sp_name)
 
   
   terra::writeRaster(
