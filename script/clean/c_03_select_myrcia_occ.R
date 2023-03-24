@@ -12,11 +12,13 @@ occ.myrcia.raw <-
 occ.df.kew %>% 
   filter(str_detect(species, "Myrcia "))
 
+n_sp_raw <- occ.myrcia.raw$species %>% unique() %>% length()
+
 ## Filter occurrence records in environmental space with the best classification 
 ## of species ID
 
 ## #######################
-## create gid bins for all region!!!
+## create grid bins for all region!!!
 ## #########################################
 
 env.data.neo <- raster::extract(

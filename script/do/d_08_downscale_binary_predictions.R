@@ -10,7 +10,7 @@ myrcia.dir <- list.files(
 
 save_dirs <- here(
   "output", "models", "raster_binary_05_degree",
-  c("few_occ", "thr_10p", "thr_min", "thr_site")
+  c("few_occ", "thr_site")
   )
 
 for(path in save_dirs) {
