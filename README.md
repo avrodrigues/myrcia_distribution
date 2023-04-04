@@ -5,46 +5,27 @@ with occurrence records available and with good quality.
 
 The modeling strategy was to split the species in two groups, with less
 and more than 25 occurrences. The species with few occurrence records
-were modeled using leave-one-out procedure. The other group were modeled
-using spatial blocks.
+were modeled using leave-one-out cross-validation The other group were
+modeled using spatial blocks cross-validation.
 
-All models were fitted with tuned maxent.
+All models were fitted with tuned Maxent.
 
 ## Repository structure
 
-the repository has three main subfolders `script`, `data`, and `output`:
+This repository is organized in four directories:
 
--   **data**  
-    | - env
--   **output**
-    -   models
-        -   LOO
-            -   LOO\_tuned\_models
-            -   raster\_best\_models
-            -   raster\_good\_models
-        -   raster\_best\_models
-        -   raster\_binary\_prediction
-            -   bin\_05\_degree
-        -   raster\_good\_models
-        -   tuned\_models
-    -   fig
--   **script**
-    -   clean
-    -   do
-    -   exercise
+`data` has the data sets used in the analysis  
+`scripts` has the scripts to make the cleaning, analysis and figures  
+`output` has the output from analysis steps and also the figures  
+`funciton` has the functions created for the analysis here
 
-### `script` folder
-
-In the `script` folder, the files are named with the following structure
-**Number\_LowerCaseLetter\_ScriptName**. - the number indicates the
-order that the scripts must be run; - the lower case letter indicates
-the type of script and its subfolder (c - clean; d - do; e - exercise) -
-the script name has a short description of the task executed in the
-script
-
-In the folder `clean` are the scripts to organize the data for the
-modeling. In the folder `do` are the scripts for model fitting,
-evaluation and model selection.
-
-Data has the input data for analysis conducted output has the results of
-model fiting and figures script is organized
+The `output` folder has the models results and needs a more detailed
+description. In `output/models` you find the models outputs for each
+species in `.rds` files inside the
+`output/models/Cv_*/*_tunned_models`.  
+In `output/models_binary_prediction` you find the raster files (`.tif`)
+for prediction in two resolutions, 10 minutes (the scale of the
+modeling) and 0.5 degrees (a coarser resolution used to derive diversity
+patterns and analysis). You can also find a `.csv` file with species
+name and geographical coordinates based on the coarser resolution
+raster.
