@@ -19,13 +19,15 @@ This repository is organized in four directories:
 `output` has the output from analysis steps and also the figures  
 `function` has the functions created for the analysis here
 
-The `output` folder has the models results and needs a more detailed
-description. In `output/models` you find the models outputs for each
-species in `.rds` files inside the
-`output/models/Cv_*/*_tunned_models`.  
+Since the `output` folder has the models results, it needs a more
+detailed description.  
+In `output/models` you find the models outputs for each species in
+`.rds` files inside the `output/models/CV_*/*_tuned_models`.  
 In `output/models_binary_prediction` you find the raster files (`.tif`)
 for prediction in two resolutions, 10 minutes (the scale of the
 modeling) and 0.5 degrees (a coarser resolution used to derive diversity
-patterns and analysis). You can also find a `.csv` file with species
-name and geographical coordinates based on the coarser resolution
-raster.
+patterns and analysis). In that folder, you can also find a `.csv` file
+with the species distribution based on the coarser resolution raster
+(0.5 degree). This file (`myrcia_binary_df_05_degree.csv`), has the
+species names, and the geographical coordinates for the raster cells
+that the species is present.

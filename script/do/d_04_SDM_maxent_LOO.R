@@ -32,7 +32,7 @@ spp.names.6.24 <-
 
 
 # modeling ----------------------------------------------------------------
-dir.save <- here("output", "models", "CV_leave_one_out", "LOO_tunned_models")
+dir.save <- here("output", "models", "CV_leave_one_out", "LOO_tuned_models")
 
 for(i in seq_along(spp.names.6.24)){
   ## select species

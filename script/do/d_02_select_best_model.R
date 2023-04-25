@@ -9,7 +9,7 @@ library(here)
 # load model results ------------------------------------------------------
 
 l.files.mod <- list.files(
-  here("output", "models", "CV_spatial_block", "tunned_models"),
+  here("output", "models", "CV_spatial_block", "tuned_models"),
   full.names = T
 )
 

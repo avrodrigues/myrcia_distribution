@@ -32,7 +32,7 @@ spp.names.25 <-
   as.character()
 
 # modeling ----------------------------------------------------------------
-dir.save <- here("output", "models", "CV_spatial_block", "tunned_models")
+dir.save <- here("output", "models", "CV_spatial_block", "tuned_models")
 
 for(i in seq_along(spp.names.25)){
   ## select species

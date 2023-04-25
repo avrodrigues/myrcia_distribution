@@ -9,7 +9,7 @@ library(here)
 # load model results ------------------------------------------------------
 
 l.files.mod <- list.files(
-  here("output", "models", "CV_leave_one_out", "LOO_tunned_models"),
+  here("output", "models", "CV_leave_one_out", "LOO_tuned_models"),
   full.names = T
 )[-1]
 
