@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/468420166.svg)](https://zenodo.org/badge/latestdoi/468420166)
+
 # Modeling distribution of *Myrcia* species
 
 The goal is to model the species distribution for all *Myrcia* species
