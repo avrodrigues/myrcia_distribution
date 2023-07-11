@@ -16,6 +16,8 @@ wgs84 <- crs(env.layers)
 neo_coastline <- read_sf(
   here("data", "shapes", "Continentes", "level1.shp")
   )
+
+ext <- extent(env.layers)
 neo_coastline <- st_crop(neo_coastline, ext) %>% st_union()
 sf::st_crs(neo_coastline) <- 4326
 
@@ -32,7 +34,7 @@ spp.names.few.occ <-
   unlist() %>% 
   as.character()
 
-dir.save <- here("output", "models_binary_prediction", "raster_binary", "few_occ")
+dir.save <- here("output", "models_binary_prediction", "raster_binary_10_minutes", "few_occ")
 
 for(i in seq_along(spp.names.few.occ)){
   occ.temp.sf <- 
@@ -42,14 +44,8 @@ for(i in seq_along(spp.names.few.occ)){
   
   pt <- st_union(occ.temp.sf)
   
-  if(nrow(occ.temp.sf) < 3){
-    sp.pol <- sf::st_buffer(pt, 0.5)
-  }
-  
-  if(nrow(occ.temp.sf) >= 3){
-    sp.pol <- sf::st_convex_hull(pt)
-    sp.pol <- sf::st_buffer(sp.pol, 0.5)
-  }
+ 
+  sp.pol <- sf::st_buffer(pt, 0.5)
   
   geo <- sf::st_geometry(sp.pol)
   sf::st_crs(geo) <- 4326

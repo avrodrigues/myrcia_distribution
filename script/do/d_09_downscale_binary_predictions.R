@@ -6,6 +6,7 @@ library(stringr)
 
 myrcia.dir <- list.files(
   here("output", "models_binary_prediction", "raster_binary_10_minutes"),
+  pattern = "few_occ|thr_site",
   full.names = T)
 
 save_dirs <- here(
