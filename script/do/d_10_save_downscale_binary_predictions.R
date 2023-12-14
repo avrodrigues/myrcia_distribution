@@ -12,7 +12,7 @@ myrcia.files <- list.files(
   here("output", "models_binary_prediction", "raster_binary_05_degree"),
   full.names = T, recursive = T, pattern = ".tif")
 
-myrcia.files <- grep(myrcia.files, pattern = "few_occ_only_buffer|thr_site", value = T)
+myrcia.files <- grep(myrcia.files, pattern = "few_occ|thr_site", value = T)
 
 bin.stk <- rast(myrcia.files)
 
